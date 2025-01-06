@@ -1,5 +1,3 @@
-version: '3.9'
-
 volumes:
   webapp-certbot:
   webapp-data:
@@ -7,23 +5,22 @@ volumes:
 services:
   webapp:
     build:
-        context: ./webapp
-        args:
-          HOSTNAME: ${HOSTNAME:?}
-      depends_on:
-        - controller
-      restart: unless-stopped
-      environment:
+      context: ./webapp
+      args:
         HOSTNAME: ${HOSTNAME:?}
-        CUSTOM_USER_ID: ${CUSTOM_USER_ID:-}
-        TZ: ${TZ:-UTC}
-      volumes:
-        - webapp-certbot:/etc/letsencrypt
-        - webapp-data:/data
-      ports:
-        - 80:80
-        - 443:443
-
+    depends_on:
+      - controller
+    restart: unless-stopped
+    environment:
+      HOSTNAME: ${HOSTNAME:?}
+      CUSTOM_USER_ID: ${CUSTOM_USER_ID:-}
+      TZ: ${TZ:-UTC}
+    volumes:
+      - webapp-certbot:/etc/letsencrypt
+      - webapp-data:/data
+    ports:
+      - 80:80
+      - 443:443
   controller:
     build: ./controller
     user: "${CONTROLLER_UID:?}:${CONTROLLER_GID:?}"
@@ -31,9 +28,9 @@ services:
     environment:
       TZ: ${TZ:-UTC}
     volumes:
-      - './ctfs:/ctfs:ro'
+      - "./ctfs:/ctfs:ro"
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
     expose:
-      - '3000'
+      - "3000"
