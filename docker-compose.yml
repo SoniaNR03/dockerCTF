@@ -3,6 +3,24 @@ volumes:
   webapp-data:
 
 services:
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        HOSTNAME: ${HOSTNAME:?}
+    depends_on:
+      - controller
+      - webapp
+    restart: unless-stopped
+    environment:
+      HOSTNAME: ${HOSTNAME:?}
+      CUSTOM_USER_ID: ${CUSTOM_USER_ID:-}
+      TZ: ${TZ:-UTC}
+      PORT: 5173
+    # volumes:
+    #   - .:/app # TODO: CHECKfor development
+    ports:
+      - "5173:5173"
   webapp:
     build:
       context: ./webapp
@@ -19,8 +37,9 @@ services:
     volumes:
       - webapp-certbot:/etc/letsencrypt
       - webapp-data:/data
+      # - .:/app # TODO: CHECKfor development
     ports:
-      - 80:80
+      - "80:80"
   controller:
     build: ./controller
     user: "${CONTROLLER_UID:?}:${CONTROLLER_GID:?}"

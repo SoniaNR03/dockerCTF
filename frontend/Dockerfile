@@ -13,12 +13,14 @@ RUN npm install
 # Copy the rest of the files
 COPY . .
 
+# Build Vite
+RUN npm run build
 
-# RUN node buildCTF.js
+# Install server
+RUN npm install -g serve
 
-# Expose the port 3000
-EXPOSE 3000
+EXPOSE 5173
 
+# Execute server
+CMD ["serve", "-s", "dist", "-l", "5173"]
 
-# Command to run the application
-CMD ["node", "app/index.js"]

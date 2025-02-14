@@ -1,11 +1,17 @@
 const express = require('express');
+
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT_CONTROLLER || 3000;
 
 app.get('/', (req, res) => {
-    res.send('DOCKER CONTROLLER WORKING');
+    console.log('Request received from:', req.ip);
+    res.send('Controller response');
+});
+
+app.post('/', (req, res) => {
+    res.send('POST response from controller');
 });
 
 app.listen(port, '0.0.0.0', () => {
-    console.log(`RUNNING ON http://localhost:${port}`);
+    console.log(`RUNNING ON http://controller:${port}`);
 });
