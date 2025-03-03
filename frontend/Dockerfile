@@ -4,6 +4,10 @@ FROM node:23-alpine
 # Stablish the working directory
 WORKDIR /app
 
+# Set the environment variable
+ARG USER_ID
+ENV USER_ID=${USER_ID}
+
 # Copy the package.json and package-lock.json
 COPY package*.json ./
 

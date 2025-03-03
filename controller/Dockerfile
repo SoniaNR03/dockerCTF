@@ -13,12 +13,8 @@ RUN npm install
 # Copy the rest of the files
 COPY . .
 
-
-# RUN node buildCTF.js
-
 # Expose the port 3000
 EXPOSE 3000
 
-
 # Command to run the application
-CMD ["node", "app/index.js"]
+CMD node buildCTF.js && node app/index.js

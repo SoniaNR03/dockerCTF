@@ -1,10 +1,9 @@
-# Node.js image
-FROM node:23-alpine
+FROM php:8.2-alpine
 
 # Copy app
 WORKDIR /app
 COPY . .
 
-# Initialize the app
+# Define entrypoint
 CMD ["php", "-S", "0.0.0.0:8080", "-t", "./website"]
 EXPOSE 8080

@@ -5,5 +5,10 @@ export default defineConfig({
             '/api': 'http://localhost'
         },
         port: process.env.PORT_VITE || 5173,
+    },
+    define: {
+        'process.env': {
+            USER_ID: process.env.USER_ID
+        }
     }
 });

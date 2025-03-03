@@ -8,15 +8,16 @@ services:
       context: ./frontend
       args:
         HOSTNAME: ${HOSTNAME:?}
+        USER_ID: ${USER_ID:?}
     depends_on:
       - controller
       - webapp
     restart: unless-stopped
     environment:
       HOSTNAME: ${HOSTNAME:?}
-      CUSTOM_USER_ID: ${CUSTOM_USER_ID:-}
       TZ: ${TZ:-UTC}
       PORT: 5173
+      USER_ID: ${USER_ID:?}
     # volumes:
     #   - .:/app # TODO: CHECKfor development
     ports:
@@ -42,15 +43,16 @@ services:
       - "80:80"
   controller:
     build: ./controller
-    user: "${CONTROLLER_UID:?}:${CONTROLLER_GID:?}"
     restart: unless-stopped
     environment:
       TZ: ${TZ:-UTC}
       PORT: 3000
+      FLAG: ${FLAG:?}
     volumes:
-      - "./ctfs:/ctfs:ro"
-      - type: bind
-        source: /var/run/docker.sock
-        target: /var/run/docker.sock
+      - //var/run/docker.sock:/var/run/docker.sock
+      # - "./ctfs:/ctfs:ro"
+      # - type: bind
+      #   source: /var/run/docker.sock
+      #   target: /var/run/docker.sock
     expose:
       - "3000"

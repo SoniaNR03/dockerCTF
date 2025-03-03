@@ -41,20 +41,54 @@ h1 {
   padding: 2rem;
   text-align: center;
 }
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #f7df1eaa);
+.task {
+  background-color: rgba(100, 108, 255, 0.08);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(100, 108, 255, 0.2);
+  transition: all 0.3s ease;
 }
 
+.task:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.task h3 {
+  color: #646cff;
+  margin-bottom: 1rem;
+}
+
+.task button {
+  background-color: #646cff;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  transition: border-color 0.25s;
+}
+
+.task button:hover {
+  border-color: #646cff;
+  background-color: #535bf2;
+}
+
+.task input {
+  padding: 0.6em 1.2em;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(100, 108, 255, 0.2);
+  color: inherit;
+  margin-right: 0.5rem;
+}
+
+.task input:focus {
+  outline: none;
+  border-color: #646cff;
+}
 .card {
   padding: 2em;
 }
