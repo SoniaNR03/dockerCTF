@@ -1,14 +1,26 @@
 import express from 'express';
-import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 
 const app = express();
 const port = process.env.PORT_WEBAPP || 80;
 
-app.use(cors({
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST'],
-    credentials: true
-}));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Servir archivos estáticos de Vite (frontend)
+app.use(express.static(path.join(__dirname, 'frontend/dist')));
+
+// Redirect all routes to index.html (para que funcione Vue/React/SPA)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend/dist', 'index.html'));
+});
+// app.use(cors({
+//     origin: 'http://localhost:5173',
+//     methods: ['GET', 'POST'],
+//     credentials: true
+// }));
 
 app.use(express.json());
 

@@ -3,25 +3,6 @@ volumes:
   webapp-data:
 
 services:
-  frontend:
-    build:
-      context: ./frontend
-      args:
-        HOSTNAME: ${HOSTNAME:?}
-        USER_ID: ${USER_ID:?}
-    depends_on:
-      - controller
-      - webapp
-    restart: unless-stopped
-    environment:
-      HOSTNAME: ${HOSTNAME:?}
-      TZ: ${TZ:-UTC}
-      PORT: 5173
-      USER_ID: ${USER_ID:?}
-    # volumes:
-    #   - .:/app # TODO: CHECKfor development
-    ports:
-      - "5173:5173"
   webapp:
     build:
       context: ./webapp
