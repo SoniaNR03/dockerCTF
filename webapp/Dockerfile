@@ -1,49 +1,15 @@
-# Node.js image
-FROM node:23-alpine
-
-# Stablish the working directory
-WORKDIR /app
-
-COPY . .
-WORKDIR /app/app/frontend
-RUN npm install && npm run build
+FROM node:23-alpine AS build
 
 WORKDIR /app
-COPY package*.json ./
+COPY package.json .
 RUN npm install
 
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
-CMD ["node", "app/index.js"]
 
-
-
-
-
-
-
-
-
-# # Set the environment variable
-# ARG USER_ID
-# ENV USER_ID=${USER_ID}
-
-# # Copy the package.json and package-lock.json
-# COPY package*.json ./
-
-# # Install the dependencies
-# RUN npm install
-
-# # Copy the rest of the files
-# COPY . .
-
-# # Build Vite
-# RUN npm run build
-
-# # Install server
-# RUN npm install -g serve
-
-# EXPOSE 5173
-
-# # Execute server
-# CMD ["serve", "-s", "dist", "-l", "5173"]
-
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,39 +1,33 @@
-volumes:
-  webapp-certbot:
-  webapp-data:
-
 services:
-  webapp:
-    build:
-      context: ./webapp
-      args:
-        HOSTNAME: ${HOSTNAME:?}
-    depends_on:
-      - controller
-    restart: unless-stopped
-    environment:
-      HOSTNAME: ${HOSTNAME:?}
-      CUSTOM_USER_ID: ${CUSTOM_USER_ID:-}
-      TZ: ${TZ:-UTC}
-      PORT: 80
-    volumes:
-      - webapp-certbot:/etc/letsencrypt
-      - webapp-data:/data
-      # - .:/app # TODO: CHECKfor development
-    ports:
-      - "80:80"
   controller:
     build: ./controller
+    container_name: controller
     restart: unless-stopped
+    env_file: .env
     environment:
       TZ: ${TZ:-UTC}
       PORT: 3000
       FLAG: ${FLAG:?}
     volumes:
-      - //var/run/docker.sock:/var/run/docker.sock
+      - //var/run/docker.sock:/var/run/docker.sock # TODO: check
       # - "./ctfs:/ctfs:ro"
       # - type: bind
       #   source: /var/run/docker.sock
       #   target: /var/run/docker.sock
     expose:
       - "3000"
+
+  webapp:
+    build: ./webapp
+    container_name: webapp
+    ports:
+      - "80:80"
+    depends_on:
+      - controller
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      HOSTNAME: ${HOSTNAME:?}
+      CUSTOM_USER_ID: ${CUSTOM_USER_ID:-}
+      TZ: ${TZ:-UTC}
+      PORT: 80
