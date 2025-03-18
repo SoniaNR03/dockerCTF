@@ -1,6 +1,6 @@
 import express from 'express';
 import fs from 'fs';
-import { createContainer, deleteContainerByLabel } from './ctfManager.js';
+import { createContainer, deleteContainerByLabel, checkFlag } from './ctfManager.js';
 
 
 
@@ -29,7 +29,8 @@ app.get('/config', (req, res) => {
 app.post('/start', async (req, res) => {
     // const ctfId = req.body.ctfId;
     console.log('Starting CTF:', req.body.ctfId);
-    const hostPort = await createContainer(req.body.ctfId, req.body.userId, process.env.FLAG);
+    // TODO: CHECK IF FLAG ALREADY EXISTS
+    const hostPort = await createContainer(req.body.ctfId, req.body.userId);
     console.log('Request received from:', hostPort);
 
     res.send(hostPort);
@@ -40,6 +41,21 @@ app.post('/stop', async (req, res) => {
     const hostPort = await deleteContainerByLabel(req.body.ctfId, req.body.userId);
     console.log('Request received from:', hostPort);
     res.send(hostPort);
+});
+
+app.post('/check-flag', (req, res) => {
+    const { ctfId, userId, flag } = req.body;
+    console.log('Checking flag:', ctfId, userId, flag);
+    checkFlag(ctfId, userId, flag)
+        .then((result) => {
+            console.log('Flag check result:', result);
+            res.send(result);
+        })
+        .catch((error) => {
+            console.error('Error checking flag:', error);
+            res.status(500).send(error);
+        });
+
 });
 
 app.listen(port, '0.0.0.0', () => {

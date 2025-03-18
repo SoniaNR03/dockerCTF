@@ -1,28 +1,5 @@
-// import './style.css';
-// import { init } from './init.js';
-
-// init(); // 🔹 Esto generará el HTML en #app inmediatamente
-
-// // Función para hacer fetch
-// const fetchData = async (endpoint) => {
-//   try {
-//     const response = await fetch(`/api/${endpoint}`);
-//     if (!response.ok) throw new Error(`Error: ${response.status}`);
-
-//     const data = await response.json();
-//     document.querySelector('#output').textContent = JSON.stringify(data, null, 2);
-//   } catch (error) {
-//     document.querySelector('#output').textContent = `Error: ${error.message}`;
-//   }
-// };
-
-// // Asignar eventos a los botones (después de que init() generó el HTML)
-// document.querySelector('#btn1').addEventListener('click', () => fetchData('data1'));
-// document.querySelector('#btn2').addEventListener('click', () => fetchData('data2'));
-// document.querySelector('#btn3').addEventListener('click', () => fetchData('data3'));
-
 import './style.css'
-import { runCTF, stopCTF, getConfig } from './manager.js'
+import { runCTF, stopCTF, getConfig, sendFlag } from './manager.js'
 
 init();
 
@@ -34,10 +11,10 @@ async function init() {
             <div>
                 <h1>TFG - CTF with Docker</h1>
                 <h2>Sonia Navas Rutete</h2>
-                <h3>${process.env.USER_ID}</h3>
+                <h3>${process.env.HOSTNAME}</h3>
                 <div id="tasks">
                     ${Object.entries(config).map(([index, ctf]) => `
-                        <div class="task">
+                        <div class="task" id="task-${ctf.id}">
                             <h3>${ctf.name}</h3>
                             <p>${ctf.description}</p>
                             <button class="startContainer" id="${ctf.id}" 
@@ -48,8 +25,8 @@ async function init() {
                             ${!ctf.available ? 'disabled' : ''}>
                                 Stop
                             </button>
-                            <input type="text" id="flag${index}" placeholder="Introduce flag">
-                            <button>Enviar Flag</button>
+                            <input type="text" class="sendFlag" id="${ctf.id}" placeholder="Introduce flag"${!ctf.available ? 'disabled' : ''}>
+                            <button class="sendFlag" id="${ctf.id}"${!ctf.available ? 'disabled' : ''}>Send Flag</button>
                         </div>
                     `).join('')}
                 </div>
@@ -81,4 +58,26 @@ async function init() {
     });
   });
 
+  document.querySelectorAll('button.sendFlag').forEach(button => {
+    button.addEventListener('click', () =>
+      sendFlag(button.id, document.querySelector(`input#${button.id}`).value.trim()));
+  });
+
+
+
+  document.querySelectorAll("input[type=text].sendFlag").forEach(input => {
+    input.addEventListener('keydown', async (event) => {
+      if (event.key === 'Enter') {
+        const result = await sendFlag(input.id, input.value.trim());
+        const taskElement = document.querySelector(`#task-${input.id}`);
+        if (result === true) {
+          taskElement.classList.add("success");
+          input.classList.remove("error-border");
+        } else {
+          input.classList.add("error-border");
+          taskElement.classList.remove("success");
+        }
+      }
+    });
+  });
 }

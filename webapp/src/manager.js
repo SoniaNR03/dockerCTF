@@ -69,3 +69,31 @@ export async function stopCTF(element, user_id) {
   }
 
 }
+
+// Send flag
+export async function sendFlag(ctfId, inputFlag) {
+  try {
+    const userId = "user_id"; //FIXME: Change to real user id
+    if (!inputFlag) {
+      return;
+    }
+    console.log(`Sending flag: ${inputFlag} of ${ctfId}`); // TODO: DELETE
+    const response = await fetch('/api/check-flag', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ctfId: ctfId, userId: userId, flag: inputFlag })
+    });
+
+    const data = await response.text();
+    console.log(data);
+    if (data == "true") {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error("Error while sending flag: ", error);
+  }
+}

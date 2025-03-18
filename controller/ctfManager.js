@@ -38,7 +38,7 @@ async function getContainerLabel(label, part = false) {
  * @param {number} memoryLimit - Memory limit (ex. 200 MiB = 200 * 1024 * 1024).
  * @returns {number} - Returns the port assigned to the container.
  */
-async function createContainer(imageName, userId, flag, memoryLimit = 200 * 1024 * 1024) {
+async function createContainer(imageName, userId, flag = Math.random().toString(36).slice(2, 18), memoryLimit = 200 * 1024 * 1024) {
     const containerName = `${userId}_${imageName}`;
     const labelName = `${process.env.CTF_LABEL}_${containerName}`;
     try {
@@ -99,6 +99,28 @@ async function deleteAllContainers() {
     } catch (error) {
         console.error('ERROR: deleting container', error);
         throw error;
+    }
+}
+
+async function checkFlag(imageName, userId, flag) {
+    const containerName = `${userId}_${imageName}`;
+    const labelName = `${process.env.CTF_LABEL}_${containerName}`;
+    try {
+
+        var container = await getContainerLabel(labelName);
+        if (container) {
+            const data = await container.inspect();
+            const containerFlag = data.Config.Env[0].split('=')[1];
+            if (containerFlag == flag) {
+                return true;
+                // TODO: SAVE SOLVED CTF
+            }
+            return false;
+        }
+
+    } catch (error) {
+        console.error('Error when checking the flag:', error);
+        return false;
     }
 }
 
@@ -174,4 +196,4 @@ async function deleteContainerByName(imageName, userId) {
     }
 }
 
-export { createContainer, deleteContainerByName, deleteContainerByLabel, deleteAllContainers, deleteUserContainers };
+export { createContainer, deleteContainerByName, deleteContainerByLabel, deleteAllContainers, deleteUserContainers, checkFlag };

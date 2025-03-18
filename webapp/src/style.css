@@ -51,6 +51,12 @@ h1 {
   transition: all 0.3s ease;
 }
 
+.task.success {
+  background-color: rgba(144, 238, 144, 0.2);
+  border: 1px solid rgba(50, 205, 50, 0.5);
+  box-shadow: 0 4px 8px rgba(50, 205, 50, 0.3);
+}
+
 .task:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -76,6 +82,15 @@ h1 {
   background-color: #535bf2;
 }
 
+.task button:disabled,
+.task button:disabled:hover {
+  background-color: rgba(120, 130, 180, 0.3);
+  border-color: rgba(120, 130, 180, 0.5);
+  color: rgba(200, 210, 230, 0.6);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 .task input {
   padding: 0.6em 1.2em;
   border-radius: 4px;
@@ -83,6 +98,11 @@ h1 {
   border: 1px solid rgba(100, 108, 255, 0.2);
   color: inherit;
   margin-right: 0.5rem;
+}
+
+.task input.error-border {
+  border: 2px solid rgba(255, 77, 77, 0.9);
+  box-shadow: 0 0 5px rgba(255, 77, 77, 0.6);
 }
 
 .task input:focus {
@@ -107,13 +127,6 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
 @media (prefers-color-scheme: light) {
