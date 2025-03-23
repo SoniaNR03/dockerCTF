@@ -1,16 +1,16 @@
 import './style.css'
-import { runCTF, stopCTF, getConfig, sendFlag } from './manager.js'
+import { runCTF, stopCTF, getConfig, sendFlag, stopAllCTFs } from './manager.js'
+import { showLogin } from './login.js'
 
-init();
-
-async function init() {
+export async function loadCTFs() {
   const config = await getConfig();
   console.log(config);
-
+  const user_id = localStorage.getItem("username");
   document.querySelector('#app').innerHTML = `
             <div>
                 <h1>TFG - CTF with Docker</h1>
-                <h2>Sonia Navas Rutete</h2>
+                <h2>Welcome, ${user_id}</h2>
+                <button id="logout">Logout</button>
                 <div id="tasks">
                     ${Object.entries(config).map(([index, ctf]) => `
                         <div class="task" id="task-${ctf.id}">
@@ -32,13 +32,15 @@ async function init() {
             </div>
         `;
 
+  document.querySelector("#logout").addEventListener("click", logout);
+
   // TODO: ADD IF LAB NOT AVAILABLE, DISABLE BUTTONS FOCUS
   document.querySelectorAll('.startContainer').forEach(button => {
     button.addEventListener('click', async () => {
       const id = button.id;
       console.log('Starting challenge:', id);
       try {
-        await runCTF(id, "user_id");
+        await runCTF(id, user_id);
       } catch (error) {
         console.error('Error starting challenge:', error);
       }
@@ -50,7 +52,7 @@ async function init() {
       const id = button.id;
       console.log('Stoping challenge:', id);
       try {
-        await stopCTF(id, "user_id");
+        await stopCTF(id, user_id);
       } catch (error) {
         console.error('Error starting challenge:', error);
       }
@@ -59,7 +61,7 @@ async function init() {
 
   document.querySelectorAll('button.sendFlag').forEach(button => {
     button.addEventListener('click', async (event) => {
-      const result = await sendFlag(button.id, document.querySelector(`input#${button.id}`).value.trim());
+      const result = await sendFlag(button.id, user_id, document.querySelector(`input#${button.id}`).value.trim());
       const taskElement = document.querySelector(`#task-${button.id}`);
       if (result === true) {
         taskElement.classList.add("success");
@@ -71,12 +73,10 @@ async function init() {
     });
   });
 
-
-
   document.querySelectorAll("input[type=text].sendFlag").forEach(input => {
     input.addEventListener('keydown', async (event) => {
       if (event.key === 'Enter') {
-        const result = await sendFlag(input.id, input.value.trim());
+        const result = await sendFlag(input.id, user_id, input.value.trim());
         const taskElement = document.querySelector(`#task-${input.id}`);
         if (result === true) {
           taskElement.classList.add("success");
@@ -88,4 +88,10 @@ async function init() {
       }
     });
   });
+}
+
+async function logout() {
+  await stopAllCTFs(localStorage.getItem("username"));
+  localStorage.removeItem("token");
+  showLogin();
 }

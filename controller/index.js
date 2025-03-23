@@ -1,8 +1,7 @@
 import express from 'express';
 import fs from 'fs';
-import { createContainer, deleteContainerByLabel, checkFlag } from './ctfManager.js';
-
-
+import { createContainer, deleteContainerByLabel, deleteContainerByUser, checkFlag } from './ctfManager.js';
+import { loginUser, verifyToken } from './auth.js';
 
 const app = express();
 const port = process.env.PORT_CONTROLLER || 3000;
@@ -13,6 +12,25 @@ app.get('/', (req, res) => {
     console.log('Request received from:', req.ip);
     res.send('Controller response');
 });
+
+app.post('/auth/login', (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ error: "User or password Missing" });
+    }
+
+    const result = loginUser(username, password);
+
+    if (result.error) {
+        return res.status(401).json({ error: result.error });
+    }
+
+    res.json(result);
+});
+
+app.get('/auth/verify', verifyToken);
+
 
 app.get('/config', (req, res) => {
     console.log('Request received: CONFIG');
@@ -41,6 +59,11 @@ app.post('/stop', async (req, res) => {
     res.send(done);
 });
 
+app.post('/stopAll', async (req, res) => {
+    const done = await deleteContainerByUser(req.body.userId);
+    res.send(done);
+});
+
 app.post('/check-flag', (req, res) => {
     const { ctfId, userId, flag } = req.body;
     console.log('Checking flag:', ctfId, userId, flag);
@@ -53,7 +76,6 @@ app.post('/check-flag', (req, res) => {
             console.error('Error checking flag:', error);
             res.status(500).send(error);
         });
-
 });
 
 app.listen(port, '0.0.0.0', () => {

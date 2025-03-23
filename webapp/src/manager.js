@@ -73,10 +73,34 @@ export async function stopCTF(element, user_id) {
 
 }
 
-// Send flag
-export async function sendFlag(ctfId, inputFlag) {
+export async function stopAllCTFs(user_id) {
   try {
-    const userId = "user_id"; //FIXME: Change to real user id
+    console.log('Stopping all CTFs');
+    const response = await fetch('/api/stopAll', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ userId: user_id })
+    });
+    // TODO: check if all CTFs were stopped?
+    const data = await response.text();
+    if (data == "true") {
+      console.log(`CTFs stopped successfully.`);
+    } else {
+      console.log(`CTFs could not be stopped.`);
+    }
+    // TODO: Delete window
+  } catch (error) {
+    console.error('Error:', error);
+  }
+
+}
+
+// Send flag
+export async function sendFlag(ctfId, userId, inputFlag) {
+  try {
+
     if (!inputFlag) {
       return;
     }
