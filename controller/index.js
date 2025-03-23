@@ -1,7 +1,7 @@
 import express from 'express';
 import fs from 'fs';
 import { createContainer, deleteContainerByLabel, deleteContainerByUser, checkFlag } from './ctfManager.js';
-import { loginUser, verifyToken } from './auth.js';
+import { loginUser, registerUser, verifyToken } from './auth.js';
 
 const app = express();
 const port = process.env.PORT_CONTROLLER || 3000;
@@ -21,6 +21,22 @@ app.post('/auth/login', (req, res) => {
     }
 
     const result = loginUser(username, password);
+
+    if (result.error) {
+        return res.status(401).json({ error: result.error });
+    }
+
+    res.json(result);
+});
+
+app.post('/auth/register', (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ error: "User or password Missing" });
+    }
+
+    const result = registerUser(username, password);
 
     if (result.error) {
         return res.status(401).json({ error: result.error });

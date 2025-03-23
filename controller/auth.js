@@ -31,15 +31,27 @@ export function loginUser(username, password) {
         if (bcrypt.compareSync(password, user.password)) {
             return { token: generateToken(username) };
         } else {
-            return { error: "Contraseña incorrecta" };
+            return { error: "Incorrect Password" };
         }
     } else {
+        return { error: "User not found" };
+    }
+}
+
+export function registerUser(username, password) {
+    let users = getUsers();
+
+    const user = users.find(u => u.username === username);
+
+    if (!user) {
         // If the user does not exist, we create it
         const hashedPassword = bcrypt.hashSync(password, 10);
         users.push({ username, password: hashedPassword });
         saveUsers(users);
 
         return { token: generateToken(username) };
+    } else {
+        return { error: "User already exists" };
     }
 }
 
