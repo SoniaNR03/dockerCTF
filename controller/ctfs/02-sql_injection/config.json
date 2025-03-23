@@ -1,0 +1,6 @@
+{
+  "id": "ctf-02",
+  "name": "SQL Injection",
+  "description": "SQL Injection is a code injection technique that might destroy your database.",
+  "available": true
+}

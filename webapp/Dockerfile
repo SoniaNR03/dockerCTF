@@ -1,20 +1,22 @@
-# Node.js image
-FROM node:23-alpine
+FROM node:23-alpine AS build
 
-# Stablish the working directory
 WORKDIR /app
-
-# Copy the package.json and package-lock.json
-COPY package*.json ./
-
-# Install the dependencies
+COPY package.json .
 RUN npm install
 
-# Copy the rest of the files
 COPY . .
+RUN npm run build
 
-# Expose the port 80
+
+FROM node:23-alpine
+
+WORKDIR /app
+
+COPY --from=build /app/dist ./public
+COPY server.js package.json ./
+
+RUN npm install --omit=dev 
+
 EXPOSE 80
 
-# Command to run the application
-CMD ["node", "app/index.js"]
+CMD ["node", "server.js"]
