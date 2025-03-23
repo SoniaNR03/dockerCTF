@@ -32,15 +32,13 @@ app.post('/start', async (req, res) => {
     // TODO: CHECK IF FLAG ALREADY EXISTS
     const hostPort = await createContainer(req.body.ctfId, req.body.userId);
     console.log('Request received from:', hostPort);
-
     res.send(hostPort);
 });
 
 app.post('/stop', async (req, res) => {
     console.log("Stopping CTF:", req.body.ctfId);
-    const hostPort = await deleteContainerByLabel(req.body.ctfId, req.body.userId);
-    console.log('Request received from:', hostPort);
-    res.send(hostPort);
+    const done = await deleteContainerByLabel(req.body.ctfId, req.body.userId);
+    res.send(done);
 });
 
 app.post('/check-flag', (req, res) => {

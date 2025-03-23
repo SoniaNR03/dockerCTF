@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bienvenido</title>
+</head>
+
+<body>
+    <h2>Wellcome ADMIN!</h2>
+    <p>FLAG: <span id="flag">Charging...</span></p>
+    <a href="/login">Log Out</a>
+
+    <script>
+        fetch("/flag")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("flag").innerText = data.flag;
+            })
+            .catch(error => console.error("Error obtaining FLAG:", error));
+    </script>
+
+</body>
+
+</html>

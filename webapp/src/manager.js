@@ -60,9 +60,12 @@ export async function stopCTF(element, user_id) {
       body: JSON.stringify({ ctfId: element, userId: user_id })
     });
 
-    console.log(response);
     const data = await response.text();
-    console.log(data);
+    if (data == "true") {
+      console.log(`CTF ${element} stopped successfully.`);
+    } else {
+      console.log(`CTF ${element} could not be stopped.`);
+    }
     // TODO: Delete window
   } catch (error) {
     console.error('Error:', error);

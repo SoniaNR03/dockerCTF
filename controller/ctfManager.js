@@ -165,7 +165,9 @@ async function deleteContainerByLabel(imageName, userId) {
             await container.stop();
             await container.remove();
             console.log(`Container ${containerName} deleted successfully.`);
+            return true;
         }
+        return false;
     } catch (error) {
         console.error('ERROR: deleting container', error);
         throw error;

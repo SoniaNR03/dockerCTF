@@ -1,9 +1,14 @@
-FROM php:8.2-alpine
+FROM node:23-alpine
 
-# Copy app
+# Stablish the working directory
 WORKDIR /app
-COPY . .
 
-# Define entrypoint
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "./website"]
-EXPOSE 8080
+COPY package.json package.json
+COPY server.js server.js
+COPY views views
+
+RUN npm install
+
+# TODO: send the port as an argument
+
+CMD ["node", "server.js"]

@@ -11,7 +11,6 @@ async function init() {
             <div>
                 <h1>TFG - CTF with Docker</h1>
                 <h2>Sonia Navas Rutete</h2>
-                <h3>${process.env.HOSTNAME}</h3>
                 <div id="tasks">
                     ${Object.entries(config).map(([index, ctf]) => `
                         <div class="task" id="task-${ctf.id}">
@@ -59,8 +58,17 @@ async function init() {
   });
 
   document.querySelectorAll('button.sendFlag').forEach(button => {
-    button.addEventListener('click', () =>
-      sendFlag(button.id, document.querySelector(`input#${button.id}`).value.trim()));
+    button.addEventListener('click', async (event) => {
+      const result = await sendFlag(button.id, document.querySelector(`input#${button.id}`).value.trim());
+      const taskElement = document.querySelector(`#task-${button.id}`);
+      if (result === true) {
+        taskElement.classList.add("success");
+        document.querySelector(`input#${button.id}`).classList.remove("error-border");
+      } else {
+        document.querySelector(`input#${button.id}`).classList.add("error-border");
+        taskElement.classList.remove("success");
+      }
+    });
   });
 
 
