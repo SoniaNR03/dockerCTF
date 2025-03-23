@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 
 const app = express();
 const PORT = process.env.PORT_WEBAPP || 80;
-const CONTROLLER_PORT = process.env.CONTROLLER_PROT || 3000;
+const CONTROLLER_PORT = process.env.PORT_CONTROLLER || 3000;
 const CONTROLLER_URL = `http://controller:${CONTROLLER_PORT}`; // Internal docker network
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
