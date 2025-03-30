@@ -40,7 +40,6 @@ export function loginUser(username, password) {
 
 export function registerUser(username, password) {
     let users = getUsers();
-
     const user = users.find(u => u.username === username);
 
     if (!user) {
@@ -62,17 +61,17 @@ export function generateToken(username) {
 
 // Middleware para verificar el token
 export function authenticateToken(req, res, next) {
-    const token = req.headers['authorization'];
+    const token = req.headers['authorization']?.split(' ')[1];  // El token viene en el encabezado Authorization
 
     if (!token) {
-        return res.status(401).json({ error: 'No autorizado' });
+        return res.status(403).send('Token is required');
     }
 
-    jwt.verify(token.split(" ")[1], SECRET_KEY, (err, user) => {
+    jwt.verify(token, SECRET_KEY, (err, decoded) => {
         if (err) {
-            return res.status(403).json({ error: 'Invalid token' });
+            return res.status(403).send('Invalid or expired token');
         }
-        req.user = user; // Guardamos los datos del usuario en la request
+        req.userId = decoded.username;
         next();
     });
 }

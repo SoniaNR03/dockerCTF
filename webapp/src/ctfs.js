@@ -61,7 +61,7 @@ export async function loadCTFs() {
 
   document.querySelectorAll('button.sendFlag').forEach(button => {
     button.addEventListener('click', async (event) => {
-      const result = await sendFlag(button.id, user_id, document.querySelector(`input#${button.id}`).value.trim());
+      const result = await sendFlag(button.id, document.querySelector(`input#${button.id}`).value.trim());
       const taskElement = document.querySelector(`#task-${button.id}`);
       if (result === true) {
         taskElement.classList.add("success");
@@ -76,7 +76,7 @@ export async function loadCTFs() {
   document.querySelectorAll("input[type=text].sendFlag").forEach(input => {
     input.addEventListener('keydown', async (event) => {
       if (event.key === 'Enter') {
-        const result = await sendFlag(input.id, user_id, input.value.trim());
+        const result = await sendFlag(input.id, input.value.trim());
         const taskElement = document.querySelector(`#task-${input.id}`);
         if (result === true) {
           taskElement.classList.add("success");
@@ -91,7 +91,9 @@ export async function loadCTFs() {
 }
 
 async function logout() {
-  await stopAllCTFs(localStorage.getItem("username"));
-  localStorage.removeItem("token");
-  showLogin();
+  const response = await stopAllCTFs();
+  if (response) {
+    localStorage.removeItem("token");
+    showLogin();
+  }
 }
