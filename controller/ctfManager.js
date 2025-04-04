@@ -1,12 +1,9 @@
 import Docker from 'dockerode';
 const docker = new Docker();
 
-
-
-
 async function getContainerLabel(label, part = false) {
     try {
-        const containers = await docker.listContainers({ all: true }); //TODO: CHECK LIST CONTAINERS
+        const containers = await docker.listContainers({ all: true });
         for (const containerInfo of containers) {
             const container = docker.getContainer(containerInfo.Id);
             const data = await container.inspect();
@@ -113,7 +110,6 @@ async function checkFlag(imageName, userId, flag) {
             const containerFlag = data.Config.Env[0].split('=')[1];
             if (containerFlag == flag) {
                 return true;
-                // TODO: SAVE SOLVED CTF
             }
             return false;
         }

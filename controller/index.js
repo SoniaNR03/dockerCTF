@@ -61,10 +61,9 @@ app.get('/config', (req, res) => {
 });
 
 app.post('/start', authenticateToken, async (req, res) => {
-    // const ctfId = req.body.ctfId;
+
     console.log('Starting CTF:', req.body.ctfId);
 
-    // TODO: CHECK IF FLAG ALREADY EXISTS
     const hostPort = await createContainer(req.body.ctfId, req.userId);
     console.log('Request received from:', hostPort);
     res.send(hostPort);
