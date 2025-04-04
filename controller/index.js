@@ -1,8 +1,7 @@
 import express from 'express';
 import fs from 'fs';
-import { createContainer, deleteContainerByLabel, checkFlag } from './ctfManager.js';
-
-
+import { createContainer, deleteContainerByLabel, deleteContainerByUser, checkFlag } from './ctfManager.js';
+import { authenticateToken, loginUser, registerUser, verifyToken } from './auth.js';
 
 const app = express();
 const port = process.env.PORT_CONTROLLER || 3000;
@@ -13,6 +12,41 @@ app.get('/', (req, res) => {
     console.log('Request received from:', req.ip);
     res.send('Controller response');
 });
+
+app.post('/auth/login', (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ error: "User or Password Missing" });
+    }
+
+    const result = loginUser(username, password);
+
+    if (result.error) {
+        return res.status(401).json({ error: result.error });
+    }
+
+    res.json(result);
+});
+
+app.post('/auth/register', (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ error: "User or Password Missing" });
+    }
+
+    const result = registerUser(username, password);
+
+    if (result.error) {
+        return res.status(401).json({ error: result.error });
+    }
+    console.log('User registered:', username);
+    res.json(result);
+});
+
+app.get('/auth/verify', verifyToken);
+
 
 app.get('/config', (req, res) => {
     console.log('Request received: CONFIG');
@@ -26,23 +60,29 @@ app.get('/config', (req, res) => {
     }
 });
 
-app.post('/start', async (req, res) => {
-    // const ctfId = req.body.ctfId;
+app.post('/start', authenticateToken, async (req, res) => {
+
     console.log('Starting CTF:', req.body.ctfId);
-    // TODO: CHECK IF FLAG ALREADY EXISTS
-    const hostPort = await createContainer(req.body.ctfId, req.body.userId);
+
+    const hostPort = await createContainer(req.body.ctfId, req.userId);
     console.log('Request received from:', hostPort);
     res.send(hostPort);
 });
 
-app.post('/stop', async (req, res) => {
+app.post('/stop', authenticateToken, async (req, res) => {
     console.log("Stopping CTF:", req.body.ctfId);
-    const done = await deleteContainerByLabel(req.body.ctfId, req.body.userId);
+    const done = await deleteContainerByLabel(req.body.ctfId, req.userId);
     res.send(done);
 });
 
-app.post('/check-flag', (req, res) => {
-    const { ctfId, userId, flag } = req.body;
+app.post('/stopAll', authenticateToken, async (req, res) => {
+    const done = await deleteContainerByUser(req.userId);
+    res.send(done);
+});
+
+app.post('/checkFlag', authenticateToken, (req, res) => {
+    const { ctfId, flag } = req.body;
+    const userId = req.userId;
     console.log('Checking flag:', ctfId, userId, flag);
     checkFlag(ctfId, userId, flag)
         .then((result) => {
@@ -53,7 +93,6 @@ app.post('/check-flag', (req, res) => {
             console.error('Error checking flag:', error);
             res.status(500).send(error);
         });
-
 });
 
 app.listen(port, '0.0.0.0', () => {

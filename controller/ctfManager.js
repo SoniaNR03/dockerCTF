@@ -1,12 +1,9 @@
 import Docker from 'dockerode';
 const docker = new Docker();
 
-
-
-
 async function getContainerLabel(label, part = false) {
     try {
-        const containers = await docker.listContainers({ all: true }); //TODO: CHECK LIST CONTAINERS
+        const containers = await docker.listContainers({ all: true });
         for (const containerInfo of containers) {
             const container = docker.getContainer(containerInfo.Id);
             const data = await container.inspect();
@@ -113,7 +110,6 @@ async function checkFlag(imageName, userId, flag) {
             const containerFlag = data.Config.Env[0].split('=')[1];
             if (containerFlag == flag) {
                 return true;
-                // TODO: SAVE SOLVED CTF
             }
             return false;
         }
@@ -124,29 +120,6 @@ async function checkFlag(imageName, userId, flag) {
     }
 }
 
-/**
- * Create a docker container with the specified image.
- * @param {string} userId - User Id.
- */
-async function deleteUserContainers(userId) {
-    // TODO: IN PROCESS
-
-    console.log('Deleting container');
-    const label = `${process.env.CTF_LABEL}_${userId}`;
-    try {
-        const container = await getContainerLabel(label, true);
-        if (container == null) {
-            console.log(`The container ${containerName} does not exist.`);
-        } else {
-            await container.stop();
-            await container.remove();
-            console.log(`Container ${containerName} deleted successfully.`);
-        }
-    } catch (error) {
-        console.error('ERROR: deleting container', error);
-        throw error;
-    }
-}
 
 /**
  * Create a docker container with the specified image.
@@ -176,26 +149,41 @@ async function deleteContainerByLabel(imageName, userId) {
 
 /**
  * Create a docker container with the specified image.
- * @param {string} imageName - Docker image name.
  * @param {string} userId - User Id.
 
  */
-async function deleteContainerByName(imageName, userId) {
-    console.log('Deleting container');
-    const containerName = `${userId}_${imageName}`;
+async function deleteContainerByUser(userId) {
+    const containerPrefix = `${process.env.CTF_LABEL}_${userId}`;
+    return deleteByPrefix(containerPrefix);
+}
+
+async function deleteByPrefix(containerPrefix) {
+
     try {
-        const container = await docker.getContainer(containerName);
-        if (container == null) {
-            console.log(`The container ${containerName} does not exist.`);
-        } else {
+        const containers = await docker.listContainers({ all: true });
+
+        const userContainers = containers.filter(container =>
+            container.Names.some(name => name.includes(containerPrefix))
+        );
+
+        if (userContainers.length === 0) {
+            console.log(`No containers found for prefix: ${prefix}`);
+            return;
+        }
+
+        for (const containerInfo of userContainers) {
+            const container = docker.getContainer(containerInfo.Id);
+
             await container.stop();
             await container.remove();
-            console.log(`Container ${containerName} deleted successfully.`);
+            console.log(`Container ${containerInfo.Names[0]} deleted successfully.`);
         }
+        return true;
+
     } catch (error) {
-        console.error('ERROR: deleting container', error);
+        console.error('Error deleting containers:', error);
         throw error;
     }
 }
 
-export { createContainer, deleteContainerByName, deleteContainerByLabel, deleteAllContainers, deleteUserContainers, checkFlag };
+export { createContainer, deleteContainerByUser, deleteContainerByLabel, deleteAllContainers, checkFlag };

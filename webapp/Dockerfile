@@ -14,6 +14,7 @@ WORKDIR /app
 
 COPY --from=build /app/dist ./public
 COPY server.js package.json ./
+COPY /icons ./public/icons
 
 RUN npm install --omit=dev 
 

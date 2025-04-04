@@ -1,16 +1,16 @@
 import './style.css'
-import { runCTF, stopCTF, getConfig, sendFlag } from './manager.js'
+import { runCTF, stopCTF, getConfig, sendFlag, stopAllCTFs } from './manager.js'
+import { showLogin } from './login.js'
 
-init();
-
-async function init() {
+export async function loadCTFs() {
   const config = await getConfig();
   console.log(config);
-
+  const user_id = localStorage.getItem("username");
   document.querySelector('#app').innerHTML = `
             <div>
                 <h1>TFG - CTF with Docker</h1>
-                <h2>Sonia Navas Rutete</h2>
+                <h2>Welcome, ${user_id}</h2>
+                <button id="logout">Logout</button>
                 <div id="tasks">
                     ${Object.entries(config).map(([index, ctf]) => `
                         <div class="task" id="task-${ctf.id}">
@@ -32,13 +32,15 @@ async function init() {
             </div>
         `;
 
+  document.querySelector("#logout").addEventListener("click", logout);
+
   // TODO: ADD IF LAB NOT AVAILABLE, DISABLE BUTTONS FOCUS
   document.querySelectorAll('.startContainer').forEach(button => {
     button.addEventListener('click', async () => {
       const id = button.id;
       console.log('Starting challenge:', id);
       try {
-        await runCTF(id, "user_id");
+        await runCTF(id, user_id);
       } catch (error) {
         console.error('Error starting challenge:', error);
       }
@@ -50,7 +52,7 @@ async function init() {
       const id = button.id;
       console.log('Stoping challenge:', id);
       try {
-        await stopCTF(id, "user_id");
+        await stopCTF(id, user_id);
       } catch (error) {
         console.error('Error starting challenge:', error);
       }
@@ -71,8 +73,6 @@ async function init() {
     });
   });
 
-
-
   document.querySelectorAll("input[type=text].sendFlag").forEach(input => {
     input.addEventListener('keydown', async (event) => {
       if (event.key === 'Enter') {
@@ -88,4 +88,12 @@ async function init() {
       }
     });
   });
+}
+
+async function logout() {
+  const response = await stopAllCTFs();
+  if (response) {
+    localStorage.removeItem("token");
+    showLogin();
+  }
 }

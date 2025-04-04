@@ -23,15 +23,17 @@ export function getCTF(element) {
   });
 }
 
-export async function runCTF(element, user_id) {
+export async function runCTF(element) {
   try {
+    const token = localStorage.getItem('token');
     console.log('runCTF');
     const response = await fetch('/api/start', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({ ctfId: element, userId: user_id })
+      body: JSON.stringify({ ctfId: element })
     });
 
     console.log(response);
@@ -49,15 +51,16 @@ export async function runCTF(element, user_id) {
 
 }
 
-export async function stopCTF(element, user_id) {
+export async function stopCTF(element) {
   try {
     console.log('stopCTF');
     const response = await fetch('/api/stop', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
-      body: JSON.stringify({ ctfId: element, userId: user_id })
+      body: JSON.stringify({ ctfId: element })
     });
 
     const data = await response.text();
@@ -73,20 +76,48 @@ export async function stopCTF(element, user_id) {
 
 }
 
+export async function stopAllCTFs() {
+  try {
+    console.log('Stopping all CTFs...');//TODO: CHARGING SCREEN
+    const response = await fetch('/api/stopAll', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({})
+    });
+    // TODO: check if all CTFs were stopped?
+    const data = await response.text();
+    if (data == "true") {
+      console.log(`CTFs stopped successfully.`);
+      return true;
+    } else {
+      console.log(`CTFs could not be stopped.`);
+      return false;
+    }
+    // TODO: Delete window
+  } catch (error) {
+    console.error('Error:', error);
+  }
+
+}
+
 // Send flag
 export async function sendFlag(ctfId, inputFlag) {
   try {
-    const userId = "user_id"; //FIXME: Change to real user id
+
     if (!inputFlag) {
       return;
     }
     console.log(`Sending flag: ${inputFlag} of ${ctfId}`); // TODO: DELETE
-    const response = await fetch('/api/check-flag', {
+    const response = await fetch('/api/checkFlag', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
-      body: JSON.stringify({ ctfId: ctfId, userId: userId, flag: inputFlag })
+      body: JSON.stringify({ ctfId: ctfId, flag: inputFlag })
     });
 
     const data = await response.text();
