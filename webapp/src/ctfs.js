@@ -7,28 +7,28 @@ export async function loadCTFs() {
   console.log(config);
   const user_id = localStorage.getItem("username");
   document.querySelector('#app').innerHTML = `
-            <div>
+            <div class="ctfs-container">
                 <h1>TFG - CTF with Docker</h1>
                 <h2>Welcome, ${user_id}</h2>
-                <button id="logout">Logout</button>
                 <div id="tasks">
-                    ${Object.entries(config).map(([index, ctf]) => `
-                        <div class="task" id="task-${ctf.id}">
-                            <h3>${ctf.name}</h3>
-                            <p>${ctf.description}</p>
-                            <button class="startContainer" id="${ctf.id}" 
-                            ${!ctf.available ? 'disabled' : ''}>
-                                Start
-                            </button>
-                            <button class="stopContainer" id="${ctf.id}" 
-                            ${!ctf.available ? 'disabled' : ''}>
-                                Stop
-                            </button>
-                            <input type="text" class="sendFlag" id="${ctf.id}" placeholder="Introduce flag"${!ctf.available ? 'disabled' : ''}>
-                            <button class="sendFlag" id="${ctf.id}"${!ctf.available ? 'disabled' : ''}>Send Flag</button>
+                  ${Object.entries(config).map(([index, ctf]) => `
+                  <div class="task" id="task-${ctf.id}">
+                  <h3>${ctf.name}</h3>
+                  <p>${ctf.description}</p>
+                  <button class="startContainer" id="${ctf.id}" 
+                  ${!ctf.available ? 'disabled' : ''}>
+                  Start
+                  </button>
+                  <button class="stopContainer" id="${ctf.id}" 
+                  ${!ctf.available ? 'disabled' : ''}>
+                  Stop
+                  </button>
+                  <input type="text" class="sendFlag" id="${ctf.id}" placeholder="Introduce flag"${!ctf.available ? 'disabled' : ''}>
+                  <button class="sendFlag" id="${ctf.id}"${!ctf.available ? 'disabled' : ''}>Send Flag</button>
                         </div>
-                    `).join('')}
+                        `).join('')}
                 </div>
+                <button id="logout">Logout</button>
             </div>
         `;
 

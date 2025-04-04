@@ -23,7 +23,95 @@ body {
   align-items: center;
   text-align: center;
 }
+/* CTFs PAGE */
 
+.ctfs-container {
+  background-color: #eae6dc;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(255, 255, 255, 0.25);
+  padding: 24px;
+  text-align: center;
+  width: 80%;
+  max-width: 800px;
+}
+
+h1,
+h2,
+h3 {
+  color: #06142e;
+}
+
+h1 {
+  font-size: 2.4em;
+  margin-bottom: 16px;
+}
+
+h2 {
+  font-size: 1.8em;
+  margin-bottom: 16px;
+}
+
+h3 {
+  font-size: 1.5em;
+  margin-bottom: 8px;
+}
+
+button {
+  background-color: #f1a208;
+  font-size: 16px;
+  color: #06142e;
+  text-transform: uppercase;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 10px 5px;
+}
+
+button:hover {
+  filter: brightness(1.2);
+  transition: background-color 0.3s ease;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.task {
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+}
+
+input[type="text"] {
+  width: 80%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  font-size: 16px;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #97adbb;
+  box-shadow: 0 0 8px #97adbb;
+}
+
+.error-border {
+  border-color: #f1916d;
+  box-shadow: 0 0 8px #f1916d;
+}
+
+.success {
+  background-color: #d4edda;
+  border-left: 5px solid #155724;
+  padding: 12px;
+}
+
+/* LOGIN PAGE */
 .registration-container {
   background-color: #eae6dc;
   border-radius: 12px;

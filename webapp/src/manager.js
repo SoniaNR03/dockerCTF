@@ -110,7 +110,6 @@ export async function sendFlag(ctfId, inputFlag) {
     if (!inputFlag) {
       return;
     }
-    console.log(`Sending flag: ${inputFlag} of ${ctfId}`); // TODO: DELETE
     const response = await fetch('/api/checkFlag', {
       method: 'POST',
       headers: {
