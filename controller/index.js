@@ -35,6 +35,10 @@ app.post('/auth/register', (req, res) => {
     if (!username || !password) {
         return res.status(400).json({ error: "User or Password Missing" });
     }
+    //TODO: CHECK
+    if (username.includes(" ")) {
+        return res.status(400).json({ error: "User cannot contain spaces" });
+    }
 
     const result = registerUser(username, password);
 

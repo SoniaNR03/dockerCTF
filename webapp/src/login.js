@@ -100,6 +100,9 @@ async function register() {
             } else if (data.error === "User or Password Missing") {
                 errorMessageElement.innerText = "Faltan usuario o contraseña";
                 errorMessageElement.classList.add("show");
+            } else if (data.error === "User cannot contain spaces") {
+                errorMessageElement.innerText = "El nombre del usuario no puede contener espacios";
+                errorMessageElement.classList.add("show");
             }
         }
     } catch (error) {
