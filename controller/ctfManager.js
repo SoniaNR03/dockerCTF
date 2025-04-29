@@ -89,7 +89,7 @@ async function deleteAllContainers() {
         if (container == null) {
             console.log(`The container ${containerName} does not exist.`);
         } else {
-            await container.stop();
+            await container.kill();
             await container.remove();
             console.log(`Container ${containerName} deleted successfully.`);
         }
@@ -135,7 +135,7 @@ async function deleteContainerByLabel(imageName, userId) {
         if (container == null) {
             console.log(`The container ${containerName} does not exist.`);
         } else {
-            await container.stop();
+            await container.kill();
             await container.remove();
             console.log(`Container ${containerName} deleted successfully.`);
             return true;
@@ -174,7 +174,7 @@ async function deleteByPrefix(containerPrefix) {
         for (const containerInfo of userContainers) {
             const container = docker.getContainer(containerInfo.Id);
 
-            await container.stop();
+            await container.kill();
             await container.remove();
             console.log(`Container ${containerInfo.Names[0]} deleted successfully.`);
         }
