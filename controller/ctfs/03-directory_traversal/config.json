@@ -1,6 +1,0 @@
-{
-  "id": "ctf-03",
-  "name": "Directory Traversal",
-  "description": "Directory Traversal is a web security vulnerability that allows an attacker access files and directories that are stored outside the web root folder.",
-  "available": true
-}
