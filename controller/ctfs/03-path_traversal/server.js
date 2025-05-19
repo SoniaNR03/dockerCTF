@@ -23,8 +23,7 @@ app.get("/login", (req, res) => {
 app.get("/file", (req, res) => {
     const filePath = req.query.path;
 
-
-    const fullPath = path.resolve(filePath);
+    const fullPath = path.resolve(__dirname, "data", filePath);
 
 
     if (fs.existsSync(fullPath)) {
