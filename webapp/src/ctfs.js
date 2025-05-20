@@ -34,7 +34,6 @@ export async function loadCTFs() {
 
   document.querySelector("#logout").addEventListener("click", logout);
 
-  // TODO: ADD IF LAB NOT AVAILABLE, DISABLE BUTTONS FOCUS
   document.querySelectorAll('.startContainer').forEach(button => {
     button.addEventListener('click', async () => {
       const id = button.id;
@@ -64,11 +63,12 @@ export async function loadCTFs() {
       const result = await sendFlag(button.id, document.querySelector(`input#${button.id}`).value.trim());
       const taskElement = document.querySelector(`#task-${button.id}`);
       if (result === true) {
+        taskElement.classList.remove("error");
         taskElement.classList.add("success");
-        document.querySelector(`input#${button.id}`).classList.remove("error-border");
       } else {
-        document.querySelector(`input#${button.id}`).classList.add("error-border");
+
         taskElement.classList.remove("success");
+        taskElement.classList.add("error");
       }
     });
   });
@@ -79,11 +79,11 @@ export async function loadCTFs() {
         const result = await sendFlag(input.id, input.value.trim());
         const taskElement = document.querySelector(`#task-${input.id}`);
         if (result === true) {
+          taskElement.classList.remove("error");
           taskElement.classList.add("success");
-          input.classList.remove("error-border");
         } else {
-          input.classList.add("error-border");
           taskElement.classList.remove("success");
+          taskElement.classList.add("error");
         }
       }
     });
