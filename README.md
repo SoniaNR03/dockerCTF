@@ -1,6 +1,6 @@
 # 🛡️ Diseño e implementación de una plataforma CTF basada en contenedores
 
-Este proyecto consiste en el desarrollo de una **plataforma web de CTFs (Capture The Flag)** orientada al ámbito académico. Permite lanzar desafíos de seguridad informática a través de contenedores Docker, ofreciendo a los usuarios un entorno práctico para el aprendizaje de técnicas y vulnerabilidades reales.
+Este proyecto consiste en el desarrollo de una **plataforma web de CTFs (Capture The Flag)** . Permite lanzar desafíos de seguridad informática a través de contenedores Docker, ofreciendo a los usuarios un entorno práctico y seguro para el aprendizaje de técnicas y vulnerabilidades reales.
 
 ---
 
@@ -10,10 +10,6 @@ Este proyecto consiste en el desarrollo de una **plataforma web de CTFs (Capture
 - [🚀 Características principales](#-características-principales)
 - [🧰 Requisitos previos](#-requisitos-previos)
 - [⚙️ Instrucciones de despliegue](#️-instrucciones-de-despliegue)
-- [🧪 Desafíos disponibles](#-desafíos-disponibles)
-- [🛠️ Estructura del proyecto](#️-estructura-del-proyecto)
-- [📚 Contexto académico](#-contexto-académico)
-- [📄 Licencia](#-licencia)
 
 ---
 
@@ -25,11 +21,10 @@ El objetivo principal de este Trabajo de Fin de Grado es diseñar una **platafor
 
 ## 🚀 Características principales
 
-- ✅ Interfaz web interactiva.
-- 🐳 Ejecución de contenedores Docker por reto.
-- 🧩 Configuración dinámica de desafíos mediante un archivo JSON.
-- 🧑‍💻 Validación automática de flags.
-- 🔐 Control de acceso y gestión de sesiones.
+- Interfaz web ejecutada a través de Docker
+- Ejecución de contenedor Docker por CTF
+- Validación automática de flags
+- Control de acceso y gestión de sesiones
 
 ---
 
@@ -47,7 +42,14 @@ Asegúrate de tener instalados:
 1. Clona este repositorio:
 
    ```bash
-   git clone https://github.com/tuusuario/plataforma-ctf-tfg.git
+   git clone https://github.com/SoniaNR03/dockerCTF
+   ```
+
+2. Despliega el contenedor docker:
+
+   ```bash
    cd plataforma-ctf-tfg
    docker compose up --build
    ```
+
+3. Accede a http://localhost/
