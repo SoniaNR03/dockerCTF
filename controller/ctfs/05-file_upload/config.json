@@ -1,0 +1,6 @@
+{
+  "id": "ctf-05",
+  "name": "File Upload",
+  "description": "File Upload vulnerabilities allow an attacker to upload malicious files to a server, potentially leading to remote code execution or other attacks.",
+  "available": true
+}
