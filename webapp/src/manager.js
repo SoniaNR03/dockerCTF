@@ -78,7 +78,7 @@ export async function stopCTF(element) {
 
 export async function stopAllCTFs() {
   try {
-    console.log('Stopping all CTFs...');//TODO: CHARGING SCREEN
+    console.log('Stopping all CTFs...');
     const response = await fetch('/api/stopAll', {
       method: 'POST',
       headers: {

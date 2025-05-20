@@ -1,6 +1,6 @@
 import express from 'express';
 import fs from 'fs';
-import { createContainer, deleteContainerByLabel, deleteContainerByUser, checkFlag } from './ctfManager.js';
+import { createContainer, deleteContainerByLabel, deleteContainerByUser, checkFlag, deleteAllContainers } from './ctfManager.js';
 import { authenticateToken, loginUser, registerUser, verifyToken } from './auth.js';
 
 const app = express();
@@ -97,6 +97,18 @@ app.post('/checkFlag', authenticateToken, (req, res) => {
             console.error('Error checking flag:', error);
             res.status(500).send(error);
         });
+});
+
+process.once('SIGTERM', () => {
+    console.log('SIGTERM signal received: closing HTTP server');
+    deleteAllContainers()
+        .then(() => {
+            console.log('All containers deleted');
+        })
+        .catch((error) => {
+            console.error('Error deleting containers:', error);
+        });
+    process.exit(0);
 });
 
 app.listen(port, '0.0.0.0', () => {

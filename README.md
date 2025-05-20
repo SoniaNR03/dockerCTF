@@ -49,5 +49,5 @@ Asegúrate de tener instalados:
    ```bash
    git clone https://github.com/tuusuario/plataforma-ctf-tfg.git
    cd plataforma-ctf-tfg
-   docker-compose up --build
+   docker compose up --build
    ```
