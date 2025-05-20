@@ -1,0 +1,6 @@
+{
+  "id": "ctf-06",
+  "name": "Race Condition",
+  "description": "Race Condition vulnerabilities occur when the system's behavior depends on the sequence or timing of uncontrollable events, leading to unexpected behavior.",
+  "available": true
+}
