@@ -5,9 +5,9 @@ import bcrypt from 'bcrypt';
 import { CONNREFUSED } from 'dns';
 
 const SECRET_KEY = process.env.JWT_SECRET || "secret";
-const USERS_FILE = path.join(process.cwd(), 'users.json'); // Ruta del archivo de usuarios
+const USERS_FILE = path.join(process.cwd(), 'users.json'); // Users file path
 
-// Función para leer los usuarios del archivo JSON
+// Read the users from the JSON file
 function getUsers() {
     if (!fs.existsSync(USERS_FILE)) {
         fs.writeFileSync(USERS_FILE, JSON.stringify({ users: [] }, null, 2));
@@ -15,12 +15,12 @@ function getUsers() {
     return JSON.parse(fs.readFileSync(USERS_FILE, 'utf8')).users;
 }
 
-// Función para guardar los usuarios en el archivo JSON
+// Write the users to the JSON file
 function saveUsers(users) {
     fs.writeFileSync(USERS_FILE, JSON.stringify({ users }, null, 2));
 }
 
-// Función para manejar el login o registro
+// Manage user login and registration
 export function loginUser(username, password) {
     let users = getUsers();
 
@@ -38,6 +38,7 @@ export function loginUser(username, password) {
     }
 }
 
+// Function to register a new user
 export function registerUser(username, password) {
     let users = getUsers();
     const user = users.find(u => u.username === username);
@@ -54,14 +55,14 @@ export function registerUser(username, password) {
     }
 }
 
-// Función para generar un token JWT
+// Function to generate a JWT token
 export function generateToken(username) {
     return jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' });
 }
 
-// Middleware para verificar el token
+// Middleware to authenticate the token
 export function authenticateToken(req, res, next) {
-    const token = req.headers['authorization']?.split(' ')[1];  // El token viene en el encabezado Authorization
+    const token = req.headers['authorization']?.split(' ')[1];  // The token comes from the header "Authorization"
 
     if (!token) {
         return res.status(403).send('Token is required');
@@ -76,6 +77,7 @@ export function authenticateToken(req, res, next) {
     });
 }
 
+// Function to verify the token
 export function verifyToken(req, res) {
     const token = req.headers.authorization?.split(" ")[1];
 

@@ -82,21 +82,6 @@ async function createContainer(imageName, userId, flag = Math.random().toString(
  * Delete all containers with ctf label.
  */
 async function deleteAllContainers() {
-    // TODO: IN PROCESS
-    // console.log('Deleting all containers');
-    // try {
-    //     const container = await getContainerLabel("ctf", true);
-    //     if (container == null) {
-    //         console.log(`No containers found related with ctf.`);
-    //     } else {
-    //         await container.kill();
-    //         await container.remove();
-    //     }
-    //     console.log(`CTF containers deleted successfully.`);
-    // } catch (error) {
-    //     console.error('ERROR: deleting container', error);
-    //     throw error;
-    // }
     const containerPrefix = `${process.env.CTF_LABEL}`;
     return deleteByPrefix(containerPrefix);
 }
@@ -163,8 +148,6 @@ async function deleteContainerByLabel(imageName, userId) {
  */
 async function deleteContainerByUser(userId) {
     const containerPrefix = `${process.env.CTF_LABEL}_${userId}`;
-    console.log(containerPrefix);
-    console.log('Deleting container');
     return deleteByPrefix(containerPrefix);
 }
 
@@ -178,7 +161,7 @@ async function deleteByPrefix(containerPrefix) {
             );
 
             if (userContainers.length === 0) {
-                console.log(`No containers found for prefix: ${prefix}`);
+                console.log(`No containers found for prefix: ${containerPrefix}`);
                 return true;
             }
 
