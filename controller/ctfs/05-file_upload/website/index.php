@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>ProjectDrive – Gestión de Archivos</title>
+    <title>CTF-5</title>
     <style>
         body {
             font-family: Arial, sans-serif;

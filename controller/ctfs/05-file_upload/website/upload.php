@@ -22,7 +22,7 @@ if (isset($_FILES['file'])) {
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <title>Subida de Archivo - ProjectDrive</title>
+    <title>CTF-5</title>
     <style>
         body {
             font-family: Arial, sans-serif;
