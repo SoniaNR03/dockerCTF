@@ -7,34 +7,33 @@ export async function loadCTFs() {
   console.log(config);
   const user_id = localStorage.getItem("username");
   document.querySelector('#app').innerHTML = `
-            <div>
+            <div class="ctfs-container">
                 <h1>TFG - CTF with Docker</h1>
                 <h2>Welcome, ${user_id}</h2>
-                <button id="logout">Logout</button>
                 <div id="tasks">
-                    ${Object.entries(config).map(([index, ctf]) => `
-                        <div class="task" id="task-${ctf.id}">
-                            <h3>${ctf.name}</h3>
-                            <p>${ctf.description}</p>
-                            <button class="startContainer" id="${ctf.id}" 
-                            ${!ctf.available ? 'disabled' : ''}>
-                                Start
-                            </button>
-                            <button class="stopContainer" id="${ctf.id}" 
-                            ${!ctf.available ? 'disabled' : ''}>
-                                Stop
-                            </button>
-                            <input type="text" class="sendFlag" id="${ctf.id}" placeholder="Introduce flag"${!ctf.available ? 'disabled' : ''}>
-                            <button class="sendFlag" id="${ctf.id}"${!ctf.available ? 'disabled' : ''}>Send Flag</button>
+                  ${Object.entries(config).map(([index, ctf]) => `
+                  <div class="task" id="task-${ctf.id}">
+                  <h3>${ctf.name}</h3>
+                  <p>${ctf.description}</p>
+                  <button class="startContainer" id="${ctf.id}" 
+                  ${!ctf.available ? 'disabled' : ''}>
+                  Start
+                  </button>
+                  <button class="stopContainer" id="${ctf.id}" 
+                  ${!ctf.available ? 'disabled' : ''}>
+                  Stop
+                  </button>
+                  <input type="text" class="sendFlag" id="${ctf.id}" placeholder="Introduce flag"${!ctf.available ? 'disabled' : ''}>
+                  <button class="sendFlag" id="${ctf.id}"${!ctf.available ? 'disabled' : ''}>Send Flag</button>
                         </div>
-                    `).join('')}
+                        `).join('')}
                 </div>
+                <button id="logout">Logout</button>
             </div>
         `;
 
   document.querySelector("#logout").addEventListener("click", logout);
 
-  // TODO: ADD IF LAB NOT AVAILABLE, DISABLE BUTTONS FOCUS
   document.querySelectorAll('.startContainer').forEach(button => {
     button.addEventListener('click', async () => {
       const id = button.id;
@@ -64,11 +63,12 @@ export async function loadCTFs() {
       const result = await sendFlag(button.id, document.querySelector(`input#${button.id}`).value.trim());
       const taskElement = document.querySelector(`#task-${button.id}`);
       if (result === true) {
+        taskElement.classList.remove("error");
         taskElement.classList.add("success");
-        document.querySelector(`input#${button.id}`).classList.remove("error-border");
       } else {
-        document.querySelector(`input#${button.id}`).classList.add("error-border");
+
         taskElement.classList.remove("success");
+        taskElement.classList.add("error");
       }
     });
   });
@@ -79,11 +79,11 @@ export async function loadCTFs() {
         const result = await sendFlag(input.id, input.value.trim());
         const taskElement = document.querySelector(`#task-${input.id}`);
         if (result === true) {
+          taskElement.classList.remove("error");
           taskElement.classList.add("success");
-          input.classList.remove("error-border");
         } else {
-          input.classList.add("error-border");
           taskElement.classList.remove("success");
+          taskElement.classList.add("error");
         }
       }
     });

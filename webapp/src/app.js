@@ -1,7 +1,6 @@
 import { showLogin } from "./login.js";
 import { loadCTFs } from "./ctfs.js";
 
-
 async function init() {
     const token = localStorage.getItem("token");
 

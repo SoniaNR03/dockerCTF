@@ -6,14 +6,14 @@ import { fileURLToPath } from "url";
 const app = express();
 const PORT = process.env.PORT_WEBAPP || 80;
 const CONTROLLER_PORT = process.env.PORT_CONTROLLER || 3000;
-const CONTROLLER_URL = `http://controller:${CONTROLLER_PORT}`; // Internal docker network
+const CONTROLLER_URL = `http://controller:${CONTROLLER_PORT}`;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
 
 // Proxy that redirects `/api/` to `controller`
-app.use(express.json());
 app.use("/api/", async (req, res) => {
     try {
         const response = await fetch(`${CONTROLLER_URL}${req.path}`, {

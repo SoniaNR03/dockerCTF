@@ -1,6 +1,6 @@
 import express from 'express';
 import fs from 'fs';
-import { createContainer, deleteContainerByLabel, deleteContainerByUser, checkFlag } from './ctfManager.js';
+import { createContainer, deleteContainerByLabel, deleteContainerByUser, checkFlag, deleteAllContainers } from './ctfManager.js';
 import { authenticateToken, loginUser, registerUser, verifyToken } from './auth.js';
 
 const app = express();
@@ -35,7 +35,7 @@ app.post('/auth/register', (req, res) => {
     if (!username || !password) {
         return res.status(400).json({ error: "User or Password Missing" });
     }
-    //TODO: CHECK
+
     if (username.includes(" ")) {
         return res.status(400).json({ error: "User cannot contain spaces" });
     }
@@ -98,6 +98,22 @@ app.post('/checkFlag', authenticateToken, (req, res) => {
             res.status(500).send(error);
         });
 });
+
+async function shutDown(signal) {
+    console.log(`${signal} signal received: closing HTTP server`);
+
+    try {
+        await deleteAllContainers();
+        console.log('All containers deleted');
+    } catch (error) {
+        console.error('Error deleting containers:', error);
+    }
+
+    process.exit(0);
+}
+
+process.once('SIGTERM', () => shutDown('SIGTERM'));
+process.once('SIGINT', () => shutDown('SIGINT'));
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`RUNNING ON http://controller:${port}`);

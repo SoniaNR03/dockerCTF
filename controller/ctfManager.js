@@ -82,23 +82,17 @@ async function createContainer(imageName, userId, flag = Math.random().toString(
  * Delete all containers with ctf label.
  */
 async function deleteAllContainers() {
-    // TODO: IN PROCESS
-    console.log('Deleting all containers');
-    try {
-        const container = await getContainerLabel(process.env.CTF_LABEL, true);
-        if (container == null) {
-            console.log(`The container ${containerName} does not exist.`);
-        } else {
-            await container.kill();
-            await container.remove();
-            console.log(`Container ${containerName} deleted successfully.`);
-        }
-    } catch (error) {
-        console.error('ERROR: deleting container', error);
-        throw error;
-    }
+    const containerPrefix = `${process.env.CTF_LABEL}`;
+    return deleteByPrefix(containerPrefix);
 }
 
+/**
+ * Check if the flag is correct.
+ * @param {string} imageName - Docker image name.
+ * @param {string} userId - User Id.
+ * @param {string} flag - Flag to be checked.
+ * @returns {boolean} - Returns true if the flag is correct, false otherwise.
+ */
 async function checkFlag(imageName, userId, flag) {
     const containerName = `${userId}_${imageName}`;
     const labelName = `${process.env.CTF_LABEL}_${containerName}`;
@@ -158,32 +152,34 @@ async function deleteContainerByUser(userId) {
 }
 
 async function deleteByPrefix(containerPrefix) {
+    if (containerPrefix) {
+        try {
+            const containers = await docker.listContainers({ all: true });
 
-    try {
-        const containers = await docker.listContainers({ all: true });
+            const userContainers = containers.filter(container =>
+                container.Names.some(name => name.includes(containerPrefix))
+            );
 
-        const userContainers = containers.filter(container =>
-            container.Names.some(name => name.includes(containerPrefix))
-        );
+            if (userContainers.length === 0) {
+                console.log(`No containers found for prefix: ${containerPrefix}`);
+                return true;
+            }
 
-        if (userContainers.length === 0) {
-            console.log(`No containers found for prefix: ${prefix}`);
-            return;
+            for (const containerInfo of userContainers.reverse()) {
+                const container = docker.getContainer(containerInfo.Id);
+
+                await container.kill();
+                await container.remove();
+                console.log(`Container ${containerInfo.Names[0]} deleted successfully.`);
+            }
+            return true;
+
+        } catch (error) {
+            console.error('Error deleting containers:', error);
+            throw error;
         }
 
-        for (const containerInfo of userContainers) {
-            const container = docker.getContainer(containerInfo.Id);
-
-            await container.kill();
-            await container.remove();
-            console.log(`Container ${containerInfo.Names[0]} deleted successfully.`);
-        }
-        return true;
-
-    } catch (error) {
-        console.error('Error deleting containers:', error);
-        throw error;
     }
 }
 
-export { createContainer, deleteContainerByUser, deleteContainerByLabel, deleteAllContainers, checkFlag };
+export { createContainer, deleteContainerByUser, deleteContainerByLabel, checkFlag, deleteAllContainers };

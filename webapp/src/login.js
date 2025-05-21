@@ -4,8 +4,8 @@ export function showLogin() {
             <div class="form-container login-form">
                 <form>
                     <h1 id="login-title">Login</h1>
-                    <input type="text" id="log-username" placeholder="User">
-                    <input type="password" id="log-password" placeholder="Password">
+                    <input type="text" id="log-username" placeholder="Usuario">
+                    <input type="password" id="log-password" placeholder="Contraseña">
                     <p class="error-message" id="login-error"></p>
                     <button id="login-button">Log In</button>
                 </form>
@@ -13,8 +13,8 @@ export function showLogin() {
             <div class="form-container signup-form">
                 <form>
                     <h1>Register</h1>
-                    <input type="text" id="reg-username" placeholder="User">
-                    <input type="password" id="reg-password" placeholder="Password">
+                    <input type="text" id="reg-username" placeholder="Usuario">
+                    <input type="password" id="reg-password" placeholder="Contraseña">
                     <p class="error-message" id="reg-error"></p>
                     <button id="signup-button">Registrarse</button>
                 </form>
@@ -58,10 +58,11 @@ async function login(event) {
 
         const data = await response.json();
         console.log(data)
+
         if (response.ok) {
             localStorage.setItem("token", data.token);
             localStorage.setItem("username", username);
-            location.reload(); // Reload the page to show the CTFs
+            location.reload();
         } else {
             if (data.error === "User or Password Missing") {
                 errorMessageElement.innerText = "Falta usuario o contraseña";
@@ -76,7 +77,7 @@ async function login(event) {
     }
 }
 
-async function register() {
+async function register(event) {
     event.preventDefault();
     const username = document.querySelector("#reg-username").value.trim();
     const password = document.querySelector("#reg-password").value.trim();

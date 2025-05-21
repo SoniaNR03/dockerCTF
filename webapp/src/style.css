@@ -1,3 +1,6 @@
+/* -------------------------
+   GLOBAL RESET & BASE STYLE
+------------------------- */
 * {
   margin: 0;
   padding: 0;
@@ -7,13 +10,15 @@
   font-synthesis: none;
 }
 
+/* -------------------------
+   LAYOUT
+------------------------- */
 body {
   background-color: #555d73;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  /* background: radial-gradient( rgb(85, 93, 115), #eae6dc); */
 }
 
 #app {
@@ -24,6 +29,116 @@ body {
   text-align: center;
 }
 
+/* -------------------------
+   COMMON ELEMENTS
+------------------------- */
+
+/* Headings */
+h1,
+h2,
+h3 {
+  color: #06142e;
+}
+
+h1 {
+  font-size: 2.4em;
+  margin-bottom: 16px;
+}
+
+h2 {
+  font-size: 1.8em;
+  margin-bottom: 16px;
+}
+
+h3 {
+  font-size: 1.5em;
+  margin-bottom: 8px;
+}
+
+/* Buttons */
+button {
+  background-color: #f1a208;
+  font-size: 16px;
+  color: #06142e;
+  text-transform: uppercase;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 10px 5px;
+}
+
+button:hover {
+  filter: brightness(1.2);
+  transition: background-color 0.3s ease;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Text Inputs */
+input[type="text"],
+.registration-container input {
+  width: 80%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  font-size: 16px;
+  color: #333333;
+}
+
+input[type="text"]:focus,
+.registration-container input:focus {
+  outline: none;
+  border-color: #97adbb;
+  box-shadow: 0 0 8px #97adbb;
+}
+
+/* -------------------------
+   CTF PAGE
+------------------------- */
+.ctfs-container {
+  background-color: #eae6dc;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(255, 255, 255, 0.25);
+  padding: 24px 4rem;
+  text-align: center;
+  width: 80%;
+  max-width: 800px;
+}
+
+#tasks {
+  max-height: 700px;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.task {
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 16px 0;
+}
+
+/* Form feedback */
+.error {
+  background-color: #f8d7da;
+  border-left: 5px solid #721c24;
+  padding: 12px;
+}
+
+.success {
+  background-color: #d4edda;
+  border-left: 5px solid #155724;
+  padding: 12px;
+}
+
+/* -------------------------
+   LOGIN / SIGNUP PAGE
+------------------------- */
 .registration-container {
   background-color: #eae6dc;
   border-radius: 12px;
@@ -35,12 +150,15 @@ body {
   min-height: 480px;
 }
 
-.registration-container p {
-  color: #06142e;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0.3px;
-  margin: 20px 0;
+.registration-container form {
+  background-color: #eae6dc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 48px;
+  height: 100%;
+  justify-content: center;
 }
 
 .registration-container h1 {
@@ -55,6 +173,14 @@ body {
   line-height: 1.1;
   color: #06142e;
   margin-bottom: 20px;
+}
+
+.registration-container p {
+  color: #06142e;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.3px;
+  margin: 20px 0;
 }
 
 .registration-container button {
@@ -75,32 +201,18 @@ body {
   transition: background-color 0.3s ease;
 }
 
-.registration-container input {
-  width: 100%;
-  padding: 10px 15px;
-  border-radius: 6px;
-  font-size: 18px;
-  border: 1px solid #333333;
-  color: #333333;
+/* Error messages */
+.registration-container p.error-message {
+  color: #f1916d;
+  display: none;
+  margin: 0;
 }
 
-.registration-container input:focus {
-  outline: none;
-  border-color: #97adbb;
-  box-shadow: 0 0 8px #97adbb;
+.registration-container p.show {
+  display: block;
 }
 
-.registration-container form {
-  background-color: #eae6dc;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  padding: 12px 48px;
-  height: 100%;
-  justify-content: center;
-}
-
+/* Forms and transitions */
 .form-container {
   position: absolute;
   top: 0;
@@ -115,10 +227,6 @@ body {
   border-right: 1px solid #06142e;
 }
 
-.registration-container.active .login-form {
-  transform: translateX(100%);
-}
-
 .signup-form {
   left: 0;
   width: 50%;
@@ -126,6 +234,11 @@ body {
   z-index: 1;
   border-left: 1px solid #06142e;
 }
+
+.registration-container.active .login-form {
+  transform: translateX(100%);
+}
+
 .registration-container.active .signup-form {
   transform: translateX(100%);
   opacity: 1;
@@ -133,19 +246,7 @@ body {
   animation: move 0.6s;
 }
 
-@keyframes move {
-  0%,
-  49.99% {
-    opacity: 0;
-    z-index: 1;
-  }
-  50%,
-  100% {
-    opacity: 1;
-    z-index: 5;
-  }
-}
-
+/* Toggle panels */
 .toggle-container {
   position: absolute;
   top: 0;
@@ -186,7 +287,6 @@ body {
   padding: 0 30px;
   text-align: center;
   top: 0;
-  transform: translateX(0);
   transition: all 0.6s ease-in-out;
 }
 
@@ -201,6 +301,7 @@ body {
 }
 
 .toggle-right {
+  right: 0;
   border-left: 1px solid #06142e;
   transform: translateX(0);
 }
@@ -209,21 +310,22 @@ body {
   transform: translateX(0);
 }
 
-.toggle-right {
-  right: 0;
-  transform: translateX(0);
-}
-
 .registration-container.active .toggle-right {
   transform: translateX(200%);
 }
 
-.registration-container p.error-message {
-  color: #f1916d;
-  display: none;
-  margin: 0;
-}
-
-.registration-container p.show {
-  display: block;
+/* -------------------------
+   ANIMATIONS
+------------------------- */
+@keyframes move {
+  0%,
+  49.99% {
+    opacity: 0;
+    z-index: 1;
+  }
+  50%,
+  100% {
+    opacity: 1;
+    z-index: 5;
+  }
 }

@@ -1,4 +1,5 @@
 export async function getConfig() {
+  // Fetch the ctfs configuration from the server
   try {
     const response = await fetch('/api/config');
     const data = await response.json();
@@ -69,16 +70,14 @@ export async function stopCTF(element) {
     } else {
       console.log(`CTF ${element} could not be stopped.`);
     }
-    // TODO: Delete window
   } catch (error) {
     console.error('Error:', error);
   }
-
 }
 
 export async function stopAllCTFs() {
   try {
-    console.log('Stopping all CTFs...');//TODO: CHARGING SCREEN
+    console.log('Stopping all CTFs...');
     const response = await fetch('/api/stopAll', {
       method: 'POST',
       headers: {
@@ -87,8 +86,9 @@ export async function stopAllCTFs() {
       },
       body: JSON.stringify({})
     });
-    // TODO: check if all CTFs were stopped?
+
     const data = await response.text();
+
     if (data == "true") {
       console.log(`CTFs stopped successfully.`);
       return true;
@@ -96,21 +96,20 @@ export async function stopAllCTFs() {
       console.log(`CTFs could not be stopped.`);
       return false;
     }
-    // TODO: Delete window
+
   } catch (error) {
     console.error('Error:', error);
   }
 
 }
 
-// Send flag
+
 export async function sendFlag(ctfId, inputFlag) {
   try {
 
     if (!inputFlag) {
       return;
     }
-    console.log(`Sending flag: ${inputFlag} of ${ctfId}`); // TODO: DELETE
     const response = await fetch('/api/checkFlag', {
       method: 'POST',
       headers: {
