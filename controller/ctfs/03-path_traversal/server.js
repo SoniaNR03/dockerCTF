@@ -41,5 +41,5 @@ app.get("/file", (req, res) => {
 
 
 app.listen(8080, () => {
-    console.log("🚀 Servidor corriendo en http://localhost:8080");
+    console.log("Servidor corriendo en http://localhost:8080");
 });

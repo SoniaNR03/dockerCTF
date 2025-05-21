@@ -1,8 +1,6 @@
 FROM node:23-alpine
 
-
 WORKDIR /app
-
 
 COPY package.json package.json
 COPY server.js server.js

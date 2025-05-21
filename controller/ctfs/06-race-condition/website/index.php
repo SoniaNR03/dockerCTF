@@ -1,7 +1,6 @@
 <?php
 $products = json_decode(file_get_contents('stock.json'), true);
 
-// Generar precios aleatorios para cada producto entre 20 y 100
 $prices = [];
 foreach ($products as $item => $stock) {
     $prices[$item] = rand(20, 100);

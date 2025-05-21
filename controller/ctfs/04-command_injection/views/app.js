@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Process stock check request
+// Process stock and check request
 app.post('/check_stock', (req, res) => {
     const storeID = "store_" + req.body.storeID;
 
@@ -30,7 +30,7 @@ app.post('/check_stock', (req, res) => {
     });
 });
 
-// Iniciamos el servidor en el puerto 8080
+
 app.listen(8080, () => {
-    console.log('Servidor corriendo en http://localhost:8080');
+    console.log('Server running in http://localhost:8080');
 });

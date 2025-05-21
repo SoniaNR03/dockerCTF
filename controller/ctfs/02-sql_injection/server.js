@@ -5,10 +5,9 @@ const path = require("path");
 const session = require("express-session");
 
 
-
-
 const app = express();
 const FLAG = process.env.FLAG || "FLAG_NOT_AVAILABLE";
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -18,6 +17,7 @@ app.use(session({
     saveUninitialized: false
 }));
 app.use(express.static(path.join(__dirname, "views")));
+
 
 const db = new sqlite3.Database("users.db");
 
@@ -66,8 +66,7 @@ app.post("/login", (req, res) => {
             req.session.user = user;
             res.redirect(`/welcome`);
         } else {
-            // TODO: Add p with error message
-            res.send("<script>alert('❌ Usuario o contraseña incorrectos'); window.location.href='/';</script>");
+            res.send("<script>alert('Usuario o contraseña incorrectos'); window.location.href='/';</script>");
         }
     });
 
@@ -95,7 +94,6 @@ app.get("/user-data", (req, res) => {
     if (!req.session.user) {
         return res.redirect("/");
     }
-    // Evitar enviar contraseña
     const { email, position, access_level, address, note } = req.session.user;
     let username = req.session.user.username;
     if (username == "admin") {
@@ -111,7 +109,6 @@ app.get("/user-data", (req, res) => {
         note
     });
 });
-
 
 app.listen(8080, () => {
     console.log("Running in http://localhost:8080");

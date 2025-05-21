@@ -18,17 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['item'])) {
 
     $stocks[$item] = $stocks[$item] - 1;
     file_put_contents($file, json_encode($stocks));
-
-    if ($stocks[$item] >= 0) {
-        echo "✅ Has comprado: $item<br>";
-    } else {
-        echo "⚠️ Compra fuera de stock detectada para '$item'<br>";
-    }
-
+    echo "Has comprado: $item<br>";
 
     if ($stocks[$item] < 0 && file_exists($flagFile)) {
         $flag = trim(file_get_contents($flagFile));
-        echo "<pre>🚩 $flag 🚩</pre>";
+        echo "<pre>🚩 $flag</pre>";
     }
 
     echo '<a href="/">Volver a la tienda</a>';
