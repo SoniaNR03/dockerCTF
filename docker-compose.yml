@@ -3,7 +3,6 @@ services:
     build: ./controller
     container_name: controller
     restart: unless-stopped
-    env_file: .env
     volumes:
       - //var/run/docker.sock:/var/run/docker.sock
     expose:
@@ -17,4 +16,3 @@ services:
     depends_on:
       - controller
     restart: unless-stopped
-    env_file: .env
