@@ -105,8 +105,8 @@ async function checkFlag(imageName, userId, flag) {
             if (containerFlag == flag) {
                 return true;
             }
-            return false;
         }
+        return false;
 
     } catch (error) {
         console.error('Error when checking the flag:', error);
