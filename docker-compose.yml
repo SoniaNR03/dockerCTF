@@ -1,9 +1,13 @@
+volumes:
+  controller-config:
+
 services:
   controller:
     build: ./controller
     container_name: controller
     restart: unless-stopped
     volumes:
+      - controller-config:/config
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock

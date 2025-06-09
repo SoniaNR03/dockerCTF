@@ -1,11 +1,9 @@
 import fs from 'fs';
-import path from 'path';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { CONNREFUSED } from 'dns';
 
 const SECRET_KEY = process.env.JWT_SECRET || "secret";
-const USERS_FILE = path.join(process.cwd(), 'users.json'); // Users file path
+const USERS_FILE = "/config/users.json";
 
 // Read the users from the JSON file
 function getUsers() {
