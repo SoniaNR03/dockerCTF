@@ -1,0 +1,6 @@
+{
+  "id": "ctf-04",
+  "name": "Comamnd Injection",
+  "description": "Command Injection allows an attacker to execute arbitrary commands on the host operating system via a vulnerable application.",
+  "available": true
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="welcome-style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Boldonse&family=Fjalla+One&family=Press+Start+2P&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+    <title>CTF-2</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>Bienvenido <span id="username">usuario</span></h1>
+        <div class="user-data">
+            <h2>Datos personales del usuario :</h2>
+            <ul id="data-list">
+                <li>Correo electrónico: <span id="email">Cargando...</span></li>
+                <li>Puesto: <span id="position">Cargando...</span></li>
+                <li>Nivel de acceso: <span id="access-level">Cargando...</span></li>
+                <li>Dirección de casa: <span id="address">Cargando...</span></li>
+                <li>Nota: <span id="note">Cargando...</span></li>
+            </ul>
+        </div>
+        <button onclick="logout()">CERRAR SESIÓN</button>
+
+    </div>
+
+
+    <script>
+        function logout() {
+            fetch("/logout", {
+                method: "GET",
+                credentials: "same-origin"
+            })
+                .then(() => {
+                    window.location.href = "/";
+                });
+        }
+
+        fetch("/user-data")
+            .then(response => {
+                if (!response.ok || !response.headers.get("content-type").includes("application/json")) {
+                    throw new Error("Not JSON");
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById("username").innerText = data.username || "user";
+                document.getElementById("email").innerText = data.email || "N/A";
+                document.getElementById("position").innerText = data.position || "N/A";
+                document.getElementById("access-level").innerText = data.access_level || "N/A";
+                document.getElementById("address").innerText = data.address || "N/A";
+                document.getElementById("note").innerText = data.note || "N/A";
+            })
+            .catch(error => {
+                console.error("Error obtaining data:", error);
+                ["access-level", "position", "email", "address", "note"].forEach(id => {
+                    document.getElementById(id).innerText = "ERROR";
+                });
+            });
+    </script>
+
+</body>
+
+</html>
